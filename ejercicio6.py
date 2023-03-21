@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class Persona(ABC):
 
-    def __init__(self,nombre='',apellido='',dni='',edad=0):
+    def __init__(self,nombre='',apellido='',dni='',edad : int = 0):
         self.__nombre = nombre
         self.__apellido = apellido
         self.__dni = dni        
@@ -52,21 +52,21 @@ class Persona(ABC):
     def edad(self,nuevo_edad):
         self.__edad = nuevo_edad
 
-    @abstractmethod
-    def mostrar(self):
-        pass
+   # @abstractmethod
+   # def mostrar(self):
+   #     pass
         #return f'Apellido: {self.apellido}, Nombre: {self.nombre}, DNI: {self.dni}, Edad: {self.edad}'  
 
-    @abstractmethod
-    def es_mayor_de_edad(self):
-        if self.edad >= 18:
-            return True
-        else:
-            return False
-
+    #@abstractmethod
+    #def es_mayor_de_edad(self):
+        #if self.edad >= 18:
+        #    return True
+        #else:
+        #    return False
+       # pass
 
 class Cuenta(Persona):
-    def __init__(self, nombre='', apellido='', dni='', edad=0, cantidad=0.0):
+    def __init__(self, nombre='', apellido='', dni='', edad=0, cantidad : float = 0):
         super().__init__(nombre, apellido, dni, edad)
         self.__cantidad=cantidad
 
@@ -80,47 +80,78 @@ class Cuenta(Persona):
     def cantidad(self,nueva_cantidad):
         self.__cantidad = nueva_cantidad
 
-    @abstractmethod
+    #@abstractmethod
     def mostrar(self):
-        return f'Apellido: {self.apellido}, Nombre: {self.nombre}, DNI: {self.dni}, Edad: {self.edad}, Cantidad: {self.cantidad}'
+        print(f'Apellido: {self.apellido}, Nombre: {self.nombre}, DNI: {self.dni}, Edad: {self.edad}, Saldo: {self.cantidad}')
 
-    @abstractmethod
-    def ingresar(self):
+    #@abstractmethod
+    def ingresar(self, deposito:float = 0):
         deposito=float(input("Ingrese el monto a depositar: "))
         if deposito < 0:
             print("No se puede depositar montos negativos")
         else:
-            nueva_cantidad= nueva_cantidad+deposito
+            self.cantidad= self.cantidad+deposito
+            print(f"El nuevo saldo es de: {self.cantidad}")
 
-    @abstractmethod
+    #@abstractmethod
     def retirar(self):
         retiro=float(input("Ingrese el monto a retirar: "))
-        nueva_cantidad= nueva_cantidad-retiro
+        self.cantidad= self.cantidad-retiro
+        print(f"El nuevo saldo de su cuenta es de: {self.cantidad}")
 
 
 class CuentaJoven(Cuenta):
-    def __init__(self, nombre='', apellido='', dni='', edad=0, cantidad=0.0, bonificacion=0):
+    def __init__(self, nombre='', apellido='', dni='', edad=0, cantidad : float = 0, bonif : float = 0):
         super().__init__(nombre, apellido, dni, edad, cantidad)
+        self.__bonif= bonif
 
-    @abstractmethod
-    def es_titular_valido(edad):
-        if edad >= 18 and edad < 25:
+    #GETTER bonificacion
+    @property
+    def bonif(self):
+        return self.__bonif
+
+    #SETTER bonificacion
+    @bonif.setter
+    def bonif(self,nueva_bonif):
+        self.__bonif = nueva_bonif
+
+    #@abstractmethod
+    def es_titular_valido(self):
+        if self.edad >= 18 and self.edad < 25:
             return True
         else:
             return False
         
-    @abstractmethod
+    #@abstractmethod
     def mostrar(self):
-        return f'Cuenta Joven. Bonificacion de {self.bonificacion}%'
+        print(f'Cuenta Joven. Bonificacion de {self.bonif}%')
+        print(f'Apellido: {self.apellido}, Nombre: {self.nombre}, DNI: {self.dni}, Edad: {self.edad}, Saldo: {self.cantidad}')
     
-    @abstractmethod
+    #@abstractmethod
     def retirar(self):
-        if es_titular_valido(edad):
+        if self.es_titular_valido():
             return super().retirar()
+        else:
+            print("Titular no valido para Cuenta Joven, imposible retirar.")
         
-ejemplo= Persona('Jorge', 'Stratta', '56778983', 56)
-print(ejemplo.nombre)
+#ejemplo= Persona('Jorge', 'Stratta', '56778983', 56)
+#print(ejemplo.nombre)
         
-
+def tester():
+    print('\n*****Ejemplo CUENTA JOVEN*****\n')
+    ejemplo = CuentaJoven('Jose', 'Perez', '12345678', 23, 0, 5.7)
+    #print(ejemplo.nombre)
+    #print(ejemplo.bonif)
+    ejemplo.mostrar()
+    ejemplo.ingresar()
+    ejemplo.retirar()
+    
+    print("\n*****Ejemplo CUENTA*******\n")
+    ejemplo2 = Cuenta('Ana', 'Martinez', '16876098', 56, 900)
+    ejemplo2.mostrar()
+    ejemplo2.ingresar()
+    ejemplo2.retirar()
+    
+tester()
 
 
